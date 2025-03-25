@@ -9,4 +9,5 @@ public class ClientData {
 
     private UUID id;
     private String name;
+    private Integer age;
 }
