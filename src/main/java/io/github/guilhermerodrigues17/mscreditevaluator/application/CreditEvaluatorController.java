@@ -1,10 +1,9 @@
 package io.github.guilhermerodrigues17.mscreditevaluator.application;
 
+import io.github.guilhermerodrigues17.mscreditevaluator.application.exceptions.CardSolicitationException;
 import io.github.guilhermerodrigues17.mscreditevaluator.application.exceptions.ClientDataNotFoundException;
 import io.github.guilhermerodrigues17.mscreditevaluator.application.exceptions.MicroserviceCommsException;
-import io.github.guilhermerodrigues17.mscreditevaluator.domain.model.ClientEvaluationResponse;
-import io.github.guilhermerodrigues17.mscreditevaluator.domain.model.ClientSituation;
-import io.github.guilhermerodrigues17.mscreditevaluator.domain.model.EvaluationData;
+import io.github.guilhermerodrigues17.mscreditevaluator.domain.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +42,16 @@ public class CreditEvaluatorController {
             return ResponseEntity.notFound().build();
         } catch (MicroserviceCommsException e) {
             return ResponseEntity.status(HttpStatus.valueOf(e.getStatus())).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("card-solicitation")
+    public ResponseEntity<Object> cardSolicitation(@RequestBody CardIssuanceSolicitationData data) {
+        try {
+            CardSolicitationProtocol cardSolicitationProtocol = creditEvaluatorService.cardIssuanceSolicitation(data);
+            return ResponseEntity.ok(cardSolicitationProtocol);
+        }catch (CardSolicitationException e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 }
