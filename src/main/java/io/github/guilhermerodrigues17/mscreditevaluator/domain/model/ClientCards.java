@@ -9,5 +9,5 @@ public class ClientCards {
 
     private String name;
     private String brand;
-    private BigDecimal creditLimitAvailable;
+    private BigDecimal approvedCreditLimit;
 }
